@@ -17,7 +17,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: APP_NAME,
   description:
-    "Commissioning field observation tool for Parkhill engineers: record a field observation, work through potential failure causes and corrective actions, and produce a field report.",
+    "Commissioning field observation tool for Parkhill engineers: record a field observation, work through recommended diagnostic checks and corrective actions, and produce a field report.",
 };
 
 export const viewport: Viewport = {

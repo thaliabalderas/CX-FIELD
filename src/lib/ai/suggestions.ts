@@ -5,7 +5,9 @@ import { env } from "@/lib/env";
 import type { SuggestionRequest } from "@/types";
 
 /**
- * Failure-cause and corrective-action suggestions from OpenAI.
+ * Diagnostic-check and corrective-action suggestions from OpenAI. (The checks
+ * are still stored and exchanged as `causes`, so existing data and the API
+ * contract are unchanged.)
  *
  * Called only from the two suggestion route handlers. The key is read from
  * `process.env` on the server and never leaves it. Photos are read from Blob
@@ -33,7 +35,7 @@ export async function suggestFailureCauses(
   return suggestList(
     `${ROLE}
 
-List 5 to 8 potential failure causes for what was found: the check points the engineer should investigate to find the root cause, most likely first. ${STYLE}`,
+List 5 to 8 recommended diagnostic checks for what was found: specific troubleshooting steps the engineer can carry out on site to narrow down why it happened, most useful first. Each check starts with a verb such as Verify, Confirm, Inspect, Measure or Compare, says what to check and, where practical, what result would indicate a problem. These are checks to perform, not conclusions: never state or imply that any of them is the established cause, and do not assume a fault the observation does not describe. ${STYLE}`,
     observationText(request),
     request.photoPaths,
   );
@@ -49,10 +51,10 @@ export async function suggestCorrectiveActions(
   return suggestList(
     `${ROLE}
 
-The engineer has already decided which potential failure causes apply. List 5 to 8 corrective actions that resolve those causes - and only those causes - most important first. Where the responsible party is clear (for example the controls contractor or the balancing contractor), name it. ${STYLE}`,
+The engineer has selected the diagnostic checks below as the ones they will carry out. List 5 to 8 corrective actions that follow from those checks - and only those checks - most important first. Phrase an action conditionally where it depends on a check confirming a problem (for example "If the actuator linkage is slipping, re-seat and recalibrate it"), rather than presenting a cause as established. Where the responsible party is clear (for example the controls contractor or the balancing contractor), name it. ${STYLE}`,
     `${observationText(request)}
 
-Potential failure causes selected by the engineer:
+Diagnostic checks selected by the engineer:
 ${causes}`,
     request.photoPaths,
   );

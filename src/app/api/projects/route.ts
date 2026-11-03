@@ -1,15 +1,22 @@
 import { apiError, handleRoute } from "@/lib/apiResponse";
+import { currentUser } from "@/lib/currentUser";
 import { isValidProjectNumber, PROJECT_NUMBER_HINT } from "@/lib/validation";
 import {
   createProject,
+  isProjectCreator,
   listProjects,
   ProjectAlreadyExistsError,
 } from "@/repositories/projectRepository";
 
 export async function GET() {
   return handleRoute("load projects", async () => {
-    const projects = await listProjects();
-    return Response.json({ projects });
+    const [projects, user] = await Promise.all([listProjects(), currentUser()]);
+    return Response.json({
+      projects: projects.map((project) => ({
+        ...project,
+        canManage: isProjectCreator(project, user),
+      })),
+    });
   });
 }
 
@@ -34,7 +41,10 @@ export async function POST(request: Request) {
         projectNumber,
         name: name.trim(),
       });
-      return Response.json({ project }, { status: 201 });
+      return Response.json(
+        { project: { ...project, canManage: true } },
+        { status: 201 },
+      );
     } catch (error) {
       if (error instanceof ProjectAlreadyExistsError) {
         return apiError(error.message, 409);

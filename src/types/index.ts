@@ -13,6 +13,15 @@ export type Project = {
   createdAt: string;
   createdBy: string;
   updatedAt: string;
+  /**
+   * Set when the project is deleted. Deletion is soft: the project, its
+   * observations and its photos stay in storage, and the project simply stops
+   * appearing. Absent on every live project.
+   */
+  deletedAt?: string;
+  deletedBy?: string;
+  /** Computed per request for the signed-in user; never stored. */
+  canManage?: boolean;
 };
 
 export type NewProjectInput = {

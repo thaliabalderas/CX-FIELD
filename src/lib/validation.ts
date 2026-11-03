@@ -125,13 +125,13 @@ export function validateSaveObservation(
     return "One or more photos are invalid.";
   }
   if (!isRecordedItemArray(input.causes)) {
-    return "One or more potential failure causes are invalid.";
+    return "One or more recommended diagnostic checks are invalid.";
   }
   if (!isRecordedItemArray(input.actions)) {
     return "One or more suggested corrective actions are invalid.";
   }
   if (input.causes!.length === 0) {
-    return "Select at least one potential failure cause.";
+    return "Select at least one recommended diagnostic check.";
   }
   if (input.actions!.length === 0) {
     return "Select at least one suggested corrective action.";

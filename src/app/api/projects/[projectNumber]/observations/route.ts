@@ -18,6 +18,10 @@ export async function GET(
       return apiError("Invalid project number.", 400);
     }
 
+    if (!(await getProject(projectNumber))) {
+      return apiError(`Project ${projectNumber} was not found.`, 404);
+    }
+
     const observations = await listObservations(projectNumber);
     return Response.json({ observations });
   });

@@ -8,6 +8,7 @@ import {
   getObservation,
   updateObservation,
 } from "@/repositories/observationRepository";
+import { getProject } from "@/repositories/projectRepository";
 import type { SaveObservationInput } from "@/types";
 
 export async function GET(
@@ -24,6 +25,10 @@ export async function GET(
     }
     if (!isValidGeneratedId(observationId)) {
       return apiError("Invalid observation id.", 400);
+    }
+
+    if (!(await getProject(projectNumber))) {
+      return apiError(`Project ${projectNumber} was not found.`, 404);
     }
 
     const observation = await getObservation(projectNumber, observationId);
@@ -50,6 +55,10 @@ export async function PUT(
     }
     if (!isValidGeneratedId(observationId)) {
       return apiError("Invalid observation id.", 400);
+    }
+
+    if (!(await getProject(projectNumber))) {
+      return apiError(`Project ${projectNumber} was not found.`, 404);
     }
 
     const body: unknown = await request.json().catch(() => null);
