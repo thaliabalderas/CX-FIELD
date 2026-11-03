@@ -5,12 +5,12 @@ import { readSuggestionRequest } from "@/lib/suggestionRequest";
 import type { SelectableItem } from "@/types";
 
 /**
- * Step 2 suggestions: potential failure causes, from the observation text and
+ * Step 2 suggestions: recommended diagnostic checks (stored and returned as `causes` for compatibility), from the observation text and
  * the photos. The model call lives in `src/lib/ai/suggestions.ts`; the browser
  * only ever talks to this route, so the OpenAI key never reaches client code.
  */
 export async function POST(request: Request) {
-  return handleRoute("generate potential failure causes", async () => {
+  return handleRoute("generate recommended diagnostic checks", async () => {
     const body: unknown = await request.json().catch(() => null);
     const suggestionRequest = readSuggestionRequest(body);
 

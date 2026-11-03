@@ -86,7 +86,7 @@ export default async function SignInPage({
               {APP_NAME}
             </Text>
             <Text fontSize="sm" color="fg.muted">
-              Record a field observation, work through potential causes and
+              Record a field observation, work through recommended diagnostic checks and
               corrective actions, and produce a commissioning field report.
             </Text>
           </Stack>

@@ -68,22 +68,22 @@ export default function CausesStepPage() {
     <WizardShell
       projectNumber={projectNumber}
       step="causes"
-      description="Select the causes that apply. These are suggestions - nothing reaches the report unless you select it."
+      description="Select the checks you will carry out. These are suggestions to guide troubleshooting, not confirmed causes - nothing reaches the report unless you select it."
     >
       <Stack gap={{ base: 5, md: 6 }}>
         <ObservationRecap form={draft.form} />
 
         <SelectableItemList
-          legend="Potential failure causes"
-          helperText="Select any number. Edit the wording of any cause, or add one of your own."
+          legend="Recommended diagnostic checks"
+          helperText="Select any number. Edit the wording of any check, or add one of your own."
           items={draft.causes}
           onToggle={toggleCause}
           onEdit={editCause}
           onRemove={removeCause}
           onAddCustom={addCustomCause}
-          addLabel="Add your own cause"
-          addPlaceholder="Describe the cause in your own words…"
-          noun="cause"
+          addLabel="Add your own check"
+          addPlaceholder="Describe the check in your own words…"
+          noun="diagnostic check"
         />
 
         <NavigationButtons
@@ -97,7 +97,7 @@ export default function CausesStepPage() {
 
         {selected.length === 0 && (
           <Text fontSize="sm" color="fg.muted">
-            Select at least one cause to continue.
+            Select at least one diagnostic check to continue.
           </Text>
         )}
       </Stack>

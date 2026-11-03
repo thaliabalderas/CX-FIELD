@@ -365,17 +365,17 @@ export default function SavedObservationPage() {
 
             <Stack gap="2">
               <SelectableItemList
-                legend="Potential failure causes"
-                helperText="Untick a cause to remove it from this observation."
+                legend="Recommended diagnostic checks"
+                helperText="Untick a check to remove it from this observation."
                 items={edits.causes}
-                addLabel="Add a cause"
-                addPlaceholder="Describe another potential failure cause"
-                noun="cause"
+                addLabel="Add a check"
+                addPlaceholder="Describe another diagnostic check"
+                noun="diagnostic check"
                 {...listOps("causes")}
               />
               {showErrors && noCauses && (
                 <Text fontSize="sm" color="fg.error">
-                  Select at least one potential failure cause.
+                  Select at least one recommended diagnostic check.
                 </Text>
               )}
             </Stack>

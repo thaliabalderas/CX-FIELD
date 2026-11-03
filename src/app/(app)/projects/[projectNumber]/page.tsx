@@ -1,10 +1,25 @@
 "use client";
 
-import { Button, HStack, Spinner, Stack, Text } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  Menu,
+  Portal,
+  Spinner,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LuClipboardList, LuPlus, LuPrinter } from "react-icons/lu";
+import {
+  LuChevronDown,
+  LuClipboardList,
+  LuDownload,
+  LuFileSpreadsheet,
+  LuFileText,
+  LuPlus,
+} from "react-icons/lu";
 
 import { EmptyState } from "@/components/EmptyState";
 import { ObservationList } from "@/components/ObservationList";
@@ -13,7 +28,10 @@ import { ProjectReport } from "@/components/ProjectReport";
 import { ProjectBreadcrumb } from "@/components/ProjectBreadcrumb";
 import { notifyError } from "@/components/ui/toaster";
 import { wizardPath } from "@/lib/workflowSteps";
-import { fetchObservations } from "@/services/observationService";
+import {
+  downloadProjectExcel,
+  fetchObservations,
+} from "@/services/observationService";
 import { fetchProject } from "@/services/projectService";
 import type { Project, SavedObservation } from "@/types";
 
@@ -27,6 +45,18 @@ export default function ProjectPage() {
     null,
   );
   const [notFound, setNotFound] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  async function exportExcel() {
+    setExporting(true);
+    try {
+      await downloadProjectExcel(projectNumber);
+    } catch (error) {
+      notifyError("Could not export the report", error);
+    } finally {
+      setExporting(false);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -80,16 +110,36 @@ export default function ProjectPage() {
       width="5xl"
       actions={
         <Stack direction={{ base: "column", md: "row" }} gap="3">
-          <Button
-            variant="outline"
-            size={{ base: "lg", md: "md" }}
-            width={{ base: "full", md: "auto" }}
-            disabled={!observations || observations.length === 0}
-            onClick={() => window.print()}
-          >
-            <LuPrinter />
-            Print report
-          </Button>
+          <Menu.Root positioning={{ placement: "bottom-end" }}>
+            <Menu.Trigger asChild>
+              <Button
+                variant="outline"
+                size={{ base: "lg", md: "md" }}
+                width={{ base: "full", md: "auto" }}
+                loading={exporting}
+                disabled={!observations || observations.length === 0}
+              >
+                <LuDownload />
+                Export report
+                <LuChevronDown />
+              </Button>
+            </Menu.Trigger>
+            <Portal>
+              <Menu.Positioner>
+                <Menu.Content minW="48">
+                  {/* PDF is the browser's print path, unchanged. */}
+                  <Menu.Item value="pdf" onClick={() => window.print()}>
+                    <LuFileText />
+                    PDF
+                  </Menu.Item>
+                  <Menu.Item value="excel" onClick={exportExcel}>
+                    <LuFileSpreadsheet />
+                    Excel
+                  </Menu.Item>
+                </Menu.Content>
+              </Menu.Positioner>
+            </Portal>
+          </Menu.Root>
           <Button
             asChild
             colorPalette="brand"
@@ -127,7 +177,7 @@ export default function ProjectPage() {
           <EmptyState
             icon={<LuClipboardList />}
             title="No observations recorded"
-            description="Start a new field observation to work through potential causes, corrective actions and a report."
+            description="Start a new field observation to work through recommended diagnostic checks, corrective actions and a report."
             action={
               <Button asChild colorPalette="brand" size="sm">
                 <Link href={newObservationHref}>

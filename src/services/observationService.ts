@@ -2,7 +2,7 @@
 
 import type { SaveObservationInput, SavedObservation } from "@/types";
 
-import { apiGet, apiPost, apiPut } from "./apiClient";
+import { apiDownload, apiGet, apiPost, apiPut } from "./apiClient";
 
 function base(projectNumber: string): string {
   return `/api/projects/${encodeURIComponent(projectNumber)}/observations`;
@@ -47,4 +47,22 @@ export async function updateObservation(
     input,
   );
   return observation;
+}
+
+/** Downloads the project's Excel deficiency log and hands it to the browser. */
+export async function downloadProjectExcel(
+  projectNumber: string,
+): Promise<void> {
+  const { blob, fileName } = await apiDownload(
+    `/api/projects/${encodeURIComponent(projectNumber)}/export`,
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName ?? `${projectNumber}_Deficiency_Log.xlsx`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }

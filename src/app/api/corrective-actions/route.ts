@@ -6,7 +6,7 @@ import type { SelectableItem } from "@/types";
 
 /**
  * Step 3 suggestions: corrective actions, from the same observation text and
- * photos as Step 2 plus the causes the engineer selected - including any they
+ * photos as Step 2 plus the diagnostic checks the engineer selected - including any they
  * typed in themselves - so the actions follow the engineer's judgement rather
  * than second-guessing it.
  */
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       !suggestionRequest.selectedCauses ||
       suggestionRequest.selectedCauses.length === 0
     ) {
-      return apiError("Select at least one potential failure cause first.", 400);
+      return apiError("Select at least one recommended diagnostic check first.", 400);
     }
 
     const actions: SelectableItem[] = (

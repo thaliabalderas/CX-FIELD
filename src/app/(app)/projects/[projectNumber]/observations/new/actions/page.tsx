@@ -60,7 +60,7 @@ export default function ActionsStepPage() {
               textTransform="uppercase"
               letterSpacing="wide"
             >
-              Causes you selected
+              Diagnostic checks you selected
             </Text>
             <Stack as="ul" gap="1.5" pl="4">
               {selectedCauses.map((cause) => (

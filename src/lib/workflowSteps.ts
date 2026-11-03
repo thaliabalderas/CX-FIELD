@@ -15,7 +15,7 @@
 
 export const WORKFLOW_STEPS = [
   { slug: "observation", title: "Observation", label: "Field Observation" },
-  { slug: "causes", title: "Causes", label: "Potential Failure Causes" },
+  { slug: "causes", title: "Checks", label: "Recommended Diagnostic Checks" },
   { slug: "actions", title: "Actions", label: "Suggested Corrective Actions" },
   { slug: "report", title: "Report", label: "Report Preview" },
 ] as const;

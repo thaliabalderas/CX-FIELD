@@ -73,3 +73,35 @@ export async function apiPostForm<T>(
   if (!response.ok) throw await toError(response);
   return (await response.json()) as T;
 }
+
+export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
+  const response = await fetch(path, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) throw await toError(response);
+  return (await response.json()) as T;
+}
+
+export async function apiDelete<T>(path: string, body: unknown): Promise<T> {
+  const response = await fetch(path, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) throw await toError(response);
+  return (await response.json()) as T;
+}
+
+/** Fetches a file the server generates, for saving from the browser. */
+export async function apiDownload(
+  path: string,
+): Promise<{ blob: Blob; fileName: string | null }> {
+  const response = await fetch(path, { cache: "no-store" });
+  if (!response.ok) throw await toError(response);
+
+  const disposition = response.headers.get("Content-Disposition") ?? "";
+  const match = /filename="([^"]+)"/.exec(disposition);
+  return { blob: await response.blob(), fileName: match ? match[1] : null };
+}

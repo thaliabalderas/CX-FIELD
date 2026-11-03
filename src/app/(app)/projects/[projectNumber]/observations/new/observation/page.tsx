@@ -56,7 +56,7 @@ export default function ObservationStepPage() {
       setCauses(causes);
       router.push(wizardPath(projectNumber, "causes"));
     } catch (error) {
-      notifyError("Could not generate potential failure causes", error);
+      notifyError("Could not generate recommended diagnostic checks", error);
     } finally {
       setGenerating(false);
     }
@@ -167,7 +167,7 @@ export default function ObservationStepPage() {
         </FormField>
 
         <NavigationButtons
-          nextLabel="Generate potential failure causes"
+          nextLabel="Generate recommended diagnostic checks"
           nextIcon={<LuSparkles />}
           onNext={generateCauses}
           nextLoading={generating}
